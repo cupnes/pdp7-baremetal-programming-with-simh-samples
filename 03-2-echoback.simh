@@ -1,27 +1,36 @@
-# tti settings
+# [メイン処理]
+d -m 100 jms 500
+d -m 101 jms 300
+d -m 102 jmp 100
+
+# [300: 指定された1文字を出力する関数]
+# ACレジスタに設定されている文字(ASCII)を出力する
+# - 文字出力完了フラグをクリア
+d -m 301 tcf
+# - ACレジスタの文字を出力バッファへ設定
+d -m 302 tls
+# - 文字出力完了フラグがセットされていれば次の命令をスキップ
+d -m 303 tsf
+# - TSF命令へ戻る
+d -m 304 jmp 303
+# - return
+d -m 305 jmp i 300
+
+# [500: 入力された1文字を取得する関数]
+# 入力された文字(ASCII)をACレジスタへ取得する
+# - キーボード入力フラグがセットされていたら次の命令をスキップ
+d -m 501 ksf
+# - 再度KSF命令へ(入力を待つ)
+d -m 502 jmp 501
+# - キーボード入力バッファから文字をACレジスタへ取得
+d -m 503 krb
+# - return
+d -m 504 jmp i 500
+
+# [実行]
+# テレタイプ入力デバイスへ全二重設定
 set tti fdx
-
-# putchar()
-# 030 return addr
-d -m 031 TCF
-d -m 032 TLS
-d -m 033 TSF
-d -m 034 JMP 33
-d -m 035 JMP I 30
-
-# getchar()
-# 060 return addr
-d -m 061 KSF
-d -m 062 JMP 61
-d -m 063 KRB
-d -m 064 JMP I 60
-
-# main()
-d -m 100 JMS 60
-d -m 101 JMS 30
-d -m 102 JMP 100
-
-# exec main()
+# メイン処理を実行
 go 100
 
 # [終了]

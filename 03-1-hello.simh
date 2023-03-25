@@ -1,0 +1,53 @@
+# "HELLO WORLD!"
+d 000 000110
+d 001 000105
+d 002 000114
+d 003 000114
+d 004 000117
+d 005 000040
+d 006 000127
+d 007 000117
+d 010 000122
+d 011 000114
+d 012 000104
+d 013 000041
+d 014 000000
+
+# putstr's work area
+# TODO アドレス0o460へ移動
+# 020 char ptr
+d 021 000001
+
+# putchar()
+# 030 return addr
+d -m 031 TCF
+d -m 032 TLS
+d -m 033 TSF
+d -m 034 JMP 33
+d -m 035 JMP I 30
+
+# putstr()
+# TODO アドレス0o400へ移動
+# ACレジスタに書かれているアドレスの文字列を出力する
+# 040 return addr
+d -m 041 DAC 20
+d -m 042 LAC I 20
+d -m 043 SZA
+d -m 044 JMP 46
+d -m 045 JMP I 40
+d -m 046 JMS 30
+d -m 047 LAC 20
+d -m 050 ADD 21
+d -m 051 DAC 20
+d -m 052 JMP 42
+
+# main()
+d -m 100 JMS 40
+d -m 101 HLT
+
+# exec main
+d ac 0
+go 100
+
+# [終了]
+by

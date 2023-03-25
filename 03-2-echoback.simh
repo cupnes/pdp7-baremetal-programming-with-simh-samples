@@ -1,0 +1,28 @@
+# tti settings
+set tti fdx
+
+# putchar()
+# 030 return addr
+d -m 031 TCF
+d -m 032 TLS
+d -m 033 TSF
+d -m 034 JMP 33
+d -m 035 JMP I 30
+
+# getchar()
+# 060 return addr
+d -m 061 KSF
+d -m 062 JMP 61
+d -m 063 KRB
+d -m 064 JMP I 60
+
+# main()
+d -m 100 JMS 60
+d -m 101 JMS 30
+d -m 102 JMP 100
+
+# exec main()
+go 100
+
+# [終了]
+by
